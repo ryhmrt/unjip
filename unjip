@@ -1,0 +1,16 @@
+#!/usr/bin/env perl
+
+use strict;
+use Archive::Zip;
+use File::Spec;
+use Encode;
+
+my $file = $ARGV[0];
+my $zip  = Archive::Zip->new();
+die 'read error' unless $zip->read($file) == &Archive::Zip::AZ_OK;
+
+for my $member ( $zip->members ) {
+    my $to = File::Spec->catfile(decode('shift_jis',$member->fileName()));
+    $zip->extractMember( $member, $to );
+}
+
